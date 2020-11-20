@@ -7,3 +7,20 @@ for (let i = 1; i < 101; i++) {
     field.appendChild(excel);
     excel.classList.add('excel');
 }
+
+let excel = document.getElementsByClassName('excel');
+let x = 1,
+    y = 10;
+
+for (let i = 0; i < 100; i++) {
+    if (x > 10) {
+        x = 1;
+        y--;
+    }
+    excel[i].setAttribute('posX', x);
+    excel[i].setAttribute('posY', y);
+    x++;
+}
+function generateSnake() {
+
+}

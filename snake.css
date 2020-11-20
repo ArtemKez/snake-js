@@ -20,3 +20,15 @@ body {
     height: 50px;
     padding: 5px;
 }
+
+.snakeBody {
+    background: url("https://static.tildacdn.com/tild3938-6633-4663-a137-366633376462/Fede___G_800.jpg");
+    background-size: cover;
+    border-radius: 50%;
+}
+
+.head {
+    background: url("https://img2.freepng.ru/20180619/ijl/kisspng-tyrannosaurus-spinosaurus-dinosaur-new-mexico-muse-t-rex-5b28e5b3acf488.9935913515294068997084.jpg");
+    background-size: cover;
+    border-radius: 10%;
+}
