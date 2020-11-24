@@ -3,17 +3,17 @@ let steps = false;
 let score = 0;
 let mouse;
 let input;
-
+let field_width = 20;
+let speed = 300;
 generateGameField();
-let snakeHead = generateSnakeHead();
 
-let snakeBody = [document.querySelector('[posX = "' + snakeHead[0] + '"][posY = "' + snakeHead[1] + '"]'),
-    document.querySelector('[posX = "' + (snakeHead[0] - 1) + '"][posY = "' + snakeHead[1] + '"]'),
-    document.querySelector('[posX = "' + (snakeHead[0] - 2) + '"][posY = "' + snakeHead[1] + '"]')];
+let snake = generateSnake();
 
 addSnakeClasses();
 createMouse()
 generateInput()
+
+let interval = setInterval(move, speed);
 
 
 function updateMove(duration) {
@@ -34,70 +34,74 @@ function clear() {
     }
 }
 
-function move() {
-    let snakeCoordinates = [snakeBody[0].getAttribute('posX'), snakeBody[0].getAttribute('posY')];
+function selectElemByCords(x, y) {
+    return document.querySelector('[posX = "' + x + '"][posY = "' + y + '"]')
+}
 
-    snakeBody[0].classList.remove('head');
-    snakeBody[snakeBody.length - 1].classList.remove('snakeBody');
-    snakeBody.pop();
+function move() {
+    let snakeCoordinates = [snake[0].getAttribute('posX'), snake[0].getAttribute('posY')];
+
+    snake[0].classList.remove('head');
+    snake[snake.length - 1].classList.remove('snakeBody');
+    snake.pop();
 
     if (direction === 'right') {
-        if (snakeCoordinates[0] < 20) {
-            snakeBody.unshift(document.querySelector('[posX = "' + (+snakeCoordinates[0] + 1) + '"][posY = "' + snakeCoordinates[1] + '"]'));
+        if (snakeCoordinates[0] < field_width) {
+            snake.unshift(selectElemByCords(+snakeCoordinates[0] + 1, snakeCoordinates[1]));
         } else {
-            snakeBody.unshift(document.querySelector('[posX = "1"][posY = "' + snakeCoordinates[1] + '"]'));
+            snake.unshift(document.querySelector('[posX = "1"][posY = "' + snakeCoordinates[1] + '"]'));
         }
     } else if (direction === 'left') {
         if (snakeCoordinates[0] > 1) {
-            snakeBody.unshift(document.querySelector('[posX = "' + (+snakeCoordinates[0] - 1) + '"][posY = "' + snakeCoordinates[1] + '"]'));
+            snake.unshift(document.querySelector('[posX = "' + (+snakeCoordinates[0] - 1) + '"][posY = "' + snakeCoordinates[1] + '"]'));
         } else {
-            snakeBody.unshift(document.querySelector('[posX = "20"][posY = "' + snakeCoordinates[1] + '"]'));
+            snake.unshift(document.querySelector('[posX = "' + field_width + '"][posY = "' + snakeCoordinates[1] + '"]'));
 
         }
     } else if (direction === 'up') {
-        if (snakeCoordinates[1] < 20) {
-            snakeBody.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "' + (+snakeCoordinates[1] + 1) + '"]'));
+        if (snakeCoordinates[1] < field_width) {
+            snake.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "' + (+snakeCoordinates[1] + 1) + '"]'));
         } else {
-            snakeBody.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "1"]'));
+            snake.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "1"]'));
 
         }
     } else if (direction === 'down') {
         if (snakeCoordinates[1] > 1) {
-            snakeBody.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "' + (snakeCoordinates[1] - 1) + '"]'));
+            snake.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "' + (snakeCoordinates[1] - 1) + '"]'));
         } else {
-            snakeBody.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "20"]'));
+            snake.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "' + field_width + '"]'));
         }
     }
 
-    if (snakeBody[0].getAttribute('posX') === mouse.getAttribute('posX') && snakeBody[0].getAttribute('posY') === mouse.getAttribute('posY')) {
+    if (snake[0].getAttribute('posX') === mouse.getAttribute('posX') && snake[0].getAttribute('posY') === mouse.getAttribute('posY')) {
         mouse.classList.remove('mouse');
-        let a = snakeBody[snakeBody.length - 1].getAttribute('posX');
-        let b = snakeBody[snakeBody.length - 1].getAttribute('posY');
-        snakeBody.push(document.querySelector('[posX = "' + a + '"][posY = "' + b + '"]'));
+        let a = snake[snake.length - 1].getAttribute('posX');
+        let b = snake[snake.length - 1].getAttribute('posY');
+        snake.push(document.querySelector('[posX = "' + a + '"][posY = "' + b + '"]'));
         createMouse();
         score++;
-        input.value = `Ваши очки: ${score}`;
+        input.value = `Ваши очки: ${score}, spped: ${speed}`;
     }
 
-    if (snakeBody[0].classList.contains('snakeBody')) {
+    if (snake[0].classList.contains('snakeBody')) {
         setTimeout(() => {
             alert(`игра окончена. Ваши очки: ${score}`)
         }, 200)
 
-        clearInterval(interval);
-        snakeBody[0].style.background = 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVaZsvfBwoMklptsBSVKY4S8wCRCUY7alnGQ&usqp=CAU) center no-repeat';
-        snakeBody[0].style.backgroundSize = "cover";
+        stopMove();
+        snake[0].style.background = 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVaZsvfBwoMklptsBSVKY4S8wCRCUY7alnGQ&usqp=CAU) center no-repeat';
+        snake[0].style.backgroundSize = "cover";
     }
 
-    snakeBody[0].classList.add('head');
-    for (let i = 0; i < snakeBody.length; i++) {
-        snakeBody[i].classList.add('snakeBody');
-    }
+    addSnakeClasses();
 
     steps = true;
+    if(speed > 50 && score !== 0 && score % 5 === 0){
+        speed -=50;
+        updateMove(speed)
+    }
 }
 
-let interval = setInterval(move, 300);
 
 window.addEventListener('keydown', function (e) {
     const keyKode = e.key;
@@ -131,10 +135,10 @@ function generateGameField() {
 
     let excel = document.getElementsByClassName('excel');
     let x = 1,
-        y = 20;
+        y = field_width;
 
     for (let i = 0; i < 400; i++) {
-        if (x > 20) {
+        if (x > field_width) {
             x = 1;
             y--;
         }
@@ -144,10 +148,13 @@ function generateGameField() {
     }
 }
 
-function generateSnakeHead() {
-    let posX = random(3, 20);
-    let posY = random(1, 20);
-    return [posX, posY];
+function generateSnake() {
+    let posX = random(3, field_width);
+    let posY = random(1, field_width);
+
+    return [document.querySelector('[posX = "' + posX + '"][posY = "' + posY + '"]'),
+        document.querySelector('[posX = "' + (posX - 1) + '"][posY = "' + posY + '"]'),
+        document.querySelector('[posX = "' + (posX - 2) + '"][posY = "' + posY + '"]')]
 }
 
 function random(min, max) {
@@ -156,8 +163,8 @@ function random(min, max) {
 
 function createMouse() {
     function generateMouse() {
-        let posX = random(1, 20);
-        let posY = random(1, 20);
+        let posX = random(1, field_width);
+        let posY = random(1, field_width);
         return [posX, posY];
 
     }
@@ -173,9 +180,9 @@ function createMouse() {
 }
 
 function addSnakeClasses() {
-    snakeBody[0].classList.add('head');
-    for (let i = 0; i < snakeBody.length; i++) {
-        snakeBody[i].classList.add('snakeBody');
+    snake[0].classList.add('head');
+    for (let i = 0; i < snake.length; i++) {
+        snake[i].classList.add('snakeBody');
     }
 }
 
