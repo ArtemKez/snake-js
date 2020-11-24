@@ -62,6 +62,19 @@ function createMouse() {
 createMouse()
 
 let direction = 'right';
+let steps = false;
+
+let input = document.createElement('input');
+document.body.appendChild(input);
+input.style.cssText = `
+margin: auto;
+margin-top: 40px;
+font-size: 30px;
+display: block;
+`;
+
+let score = 0;
+input.value = `Ваши очки: ${score}`;
 
 function move() {
     let snakeCoordinates = [snakeBody[0].getAttribute('posX'), snakeBody[0].getAttribute('posY')];
@@ -105,11 +118,13 @@ function move() {
         let b = snakeBody[snakeBody.length - 1].getAttribute('posY');
         snakeBody.push(document.querySelector('[posX = "' + a + '"][posY = "' + b + '"]'));
         createMouse();
+        score++;
+        input.value = `Ваши очки: ${score}`;
     }
 
     if (snakeBody[0].classList.contains('snakeBody')) {
         setTimeout(() => {
-            alert('игра окончена')
+            alert(`игра окончена. Ваши очки: ${score}`)
         }, 200)
 
         clearInterval(interval);
@@ -120,22 +135,28 @@ function move() {
     snakeBody[0].classList.add('head');
     for (let i = 0; i < snakeBody.length; i++) {
         snakeBody[i].classList.add('snakeBody');
-
     }
+
+    steps = true;
 }
 
 let interval = setInterval(move, 300);
 
 window.addEventListener('keydown', function (e) {
     const keyKode = e.key || e.keyCode;
-    console.log(keyKode);
-    if (keyKode === 'ArrowLeft' && direction !== 'right') {
-        direction = 'left';
-    } else if (keyKode === 'ArrowUp' && direction !== 'down') {
-        direction = 'up';
-    } else if (keyKode === 'ArrowRight' && direction !== 'left') {
-        direction = 'right';
-    } else if (keyKode === 'ArrowDown' && direction !== 'up') {
-        direction = 'down';
+    if (steps === true) {
+        if (keyKode === 'ArrowLeft' && direction !== 'right') {
+            direction = 'left';
+            steps = false;
+        } else if (keyKode === 'ArrowUp' && direction !== 'down') {
+            direction = 'up';
+            steps = false;
+        } else if (keyKode === 'ArrowRight' && direction !== 'left') {
+            direction = 'right';
+            steps = false;
+        } else if (keyKode === 'ArrowDown' && direction !== 'up') {
+            direction = 'down';
+            steps = false;
+        }
     }
 });
