@@ -1,80 +1,20 @@
-let field = document.createElement('div');
-document.body.appendChild(field);
-field.classList.add('field');
-
-for (let i = 1; i < 401; i++) {
-    let excel = document.createElement('div');
-    field.appendChild(excel);
-    excel.classList.add('excel');
-}
-
-let excel = document.getElementsByClassName('excel');
-let x = 1,
-    y = 20;
-
-for (let i = 0; i < 400; i++) {
-    if (x > 20) {
-        x = 1;
-        y--;
-    }
-    excel[i].setAttribute('posX', x);
-    excel[i].setAttribute('posY', y);
-    x++;
-}
-
-function generateSnake() {
-    let posX = Math.round(Math.random() * (20 - 3) + 3);
-    let posY = Math.round(Math.random() * (20 - 1) + 1);
-    return [posX, posY];
-}
-
-let coordinates = generateSnake();
-let snakeBody = [document.querySelector('[posX = "' + coordinates[0] + '"][posY = "' + coordinates[1] + '"]'),
-    document.querySelector('[posX = "' + (coordinates[0] - 1) + '"][posY = "' + coordinates[1] + '"]'),
-    document.querySelector('[posX = "' + (coordinates[0] - 2) + '"][posY = "' + coordinates[1] + '"]')];
-
-for (let i = 0; i < snakeBody.length; i++) {
-    snakeBody[i].classList.add('snakeBody');
-
-}
-snakeBody[0].classList.add('head');
-
-let mouse;
-
-function createMouse() {
-    function generateMouse() {
-        let posX = Math.round(Math.random() * (20 - 3) + 3);
-        let posY = Math.round(Math.random() * (20 - 1) + 1);
-        return [posX, posY];
-    }
-
-    let mouseCoordinates = generateMouse();
-    mouse = document.querySelector('[posX = "' + mouseCoordinates[0] + '"][posY = "' + mouseCoordinates[1] + '"]')
-
-    while (mouse.classList.contains('snakeBody')) {
-        let mouseCoordinates = generateMouse();
-        mouse = document.querySelector('[posX = "' + mouseCoordinates[0] + '"][posY = "' + mouseCoordinates[1] + '"]');
-    }
-
-    mouse.classList.add('mouse');
-}
-
-createMouse()
-
 let direction = 'right';
 let steps = false;
-
-let input = document.createElement('input');
-document.body.appendChild(input);
-input.style.cssText = `
-margin: auto;
-margin-top: 40px;
-font-size: 30px;
-display: block;
-`;
-
 let score = 0;
-input.value = `Ваши очки: ${score}`;
+let mouse;
+let input;
+
+generateGameField();
+let snakeHead = generateSnakeHead();
+
+let snakeBody = [document.querySelector('[posX = "' + snakeHead[0] + '"][posY = "' + snakeHead[1] + '"]'),
+    document.querySelector('[posX = "' + (snakeHead[0] - 1) + '"][posY = "' + snakeHead[1] + '"]'),
+    document.querySelector('[posX = "' + (snakeHead[0] - 2) + '"][posY = "' + snakeHead[1] + '"]')];
+
+addSnakeClasses();
+createMouse()
+generateInput()
+
 
 function updateMove(duration) {
     stopMove()
@@ -95,9 +35,6 @@ function clear() {
 }
 
 function move() {
-
-
-
     let snakeCoordinates = [snakeBody[0].getAttribute('posX'), snakeBody[0].getAttribute('posY')];
 
     snakeBody[0].classList.remove('head');
@@ -109,7 +46,6 @@ function move() {
             snakeBody.unshift(document.querySelector('[posX = "' + (+snakeCoordinates[0] + 1) + '"][posY = "' + snakeCoordinates[1] + '"]'));
         } else {
             snakeBody.unshift(document.querySelector('[posX = "1"][posY = "' + snakeCoordinates[1] + '"]'));
-
         }
     } else if (direction === 'left') {
         if (snakeCoordinates[0] > 1) {
@@ -181,3 +117,78 @@ window.addEventListener('keydown', function (e) {
         }
     }
 });
+
+function generateGameField() {
+    let field = document.createElement('div');
+    document.body.appendChild(field);
+    field.classList.add('field');
+
+    for (let i = 1; i < 401; i++) {
+        let excel = document.createElement('div');
+        field.appendChild(excel);
+        excel.classList.add('excel');
+    }
+
+    let excel = document.getElementsByClassName('excel');
+    let x = 1,
+        y = 20;
+
+    for (let i = 0; i < 400; i++) {
+        if (x > 20) {
+            x = 1;
+            y--;
+        }
+        excel[i].setAttribute('posX', x);
+        excel[i].setAttribute('posY', y);
+        x++;
+    }
+}
+
+function generateSnakeHead() {
+    let posX = random(3, 20);
+    let posY = random(1, 20);
+    return [posX, posY];
+}
+
+function random(min, max) {
+    return Math.round(Math.random() * (max - min) + min);
+}
+
+function createMouse() {
+    function generateMouse() {
+        let posX = random(1, 20);
+        let posY = random(1, 20);
+        return [posX, posY];
+
+    }
+
+    let mouseCoordinates = generateMouse();
+
+    mouse = document.querySelector('[posX = "' + mouseCoordinates[0] + '"][posY = "' + mouseCoordinates[1] + '"]')
+    while (mouse.classList.contains('snakeBody')) {
+        let mouseCoordinates = generateMouse();
+        mouse = document.querySelector('[posX = "' + mouseCoordinates[0] + '"][posY = "' + mouseCoordinates[1] + '"]');
+    }
+    mouse.classList.add('mouse');
+}
+
+function addSnakeClasses() {
+    snakeBody[0].classList.add('head');
+    for (let i = 0; i < snakeBody.length; i++) {
+        snakeBody[i].classList.add('snakeBody');
+    }
+}
+
+function generateInput() {
+// ГАВНО!!!!
+    input = document.createElement('input');
+    document.body.appendChild(input);
+
+    input.style.cssText = `
+margin: auto;
+margin-top: 40px;
+font-size: 30px;
+display: block;
+`;
+    input.value = `Ваши очки: ${score}`;
+}
