@@ -5,13 +5,31 @@ let mouse;
 let input;
 let field_width = 20;
 let speed = 300;
+let bomb;
+let speed_changed = false;
 generateGameField();
 
 let snake = generateSnake();
 
+
 addSnakeClasses();
-createMouse()
-generateInput()
+createMouse();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+createBomb();
+generateInput();
 
 let interval = setInterval(move, speed);
 
@@ -45,43 +63,56 @@ function move() {
     snake[snake.length - 1].classList.remove('snakeBody');
     snake.pop();
 
-    if (direction === 'right') {
-        if (snakeCoordinates[0] < field_width) {
-            snake.unshift(selectElemByCords(+snakeCoordinates[0] + 1, snakeCoordinates[1]));
-        } else {
-            snake.unshift(document.querySelector('[posX = "1"][posY = "' + snakeCoordinates[1] + '"]'));
-        }
-    } else if (direction === 'left') {
-        if (snakeCoordinates[0] > 1) {
-            snake.unshift(document.querySelector('[posX = "' + (+snakeCoordinates[0] - 1) + '"][posY = "' + snakeCoordinates[1] + '"]'));
-        } else {
-            snake.unshift(document.querySelector('[posX = "' + field_width + '"][posY = "' + snakeCoordinates[1] + '"]'));
+    selectElemByCords(+snakeCoordinates[0] - 1, snakeCoordinates[1])
 
-        }
-    } else if (direction === 'up') {
-        if (snakeCoordinates[1] < field_width) {
-            snake.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "' + (+snakeCoordinates[1] + 1) + '"]'));
-        } else {
-            snake.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "1"]'));
-
-        }
-    } else if (direction === 'down') {
-        if (snakeCoordinates[1] > 1) {
-            snake.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "' + (snakeCoordinates[1] - 1) + '"]'));
-        } else {
-            snake.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "' + field_width + '"]'));
-        }
+    switch (direction) {
+        case 'right':
+            snake.unshift(selectElemByCords((snakeCoordinates[0] < field_width) ? +snakeCoordinates[0] + 1 : 1, snakeCoordinates[1]));
+            break;
+        case 'left':
+            snake.unshift(selectElemByCords((snakeCoordinates[0] > 1) ? +snakeCoordinates[0] - 1 : field_width, snakeCoordinates[1]));
+            break;
+        case 'up':
+            snake.unshift(selectElemByCords(snakeCoordinates[0], (snakeCoordinates[1] < field_width) ? +snakeCoordinates[1] + 1 : 1));
+            break;
+        case 'down':
+            snake.unshift(selectElemByCords(snakeCoordinates[0], (snakeCoordinates[1] > 1) ? +snakeCoordinates[1] - 1 : field_width));
+            break;
     }
 
     if (snake[0].getAttribute('posX') === mouse.getAttribute('posX') && snake[0].getAttribute('posY') === mouse.getAttribute('posY')) {
         mouse.classList.remove('mouse');
         let a = snake[snake.length - 1].getAttribute('posX');
         let b = snake[snake.length - 1].getAttribute('posY');
-        snake.push(document.querySelector('[posX = "' + a + '"][posY = "' + b + '"]'));
+        snake.push(selectElemByCords(a, b));
         createMouse();
         score++;
-        input.value = `Ваши очки: ${score}, spped: ${speed}`;
+        input.value = `Ваши очки: ${score}, speed: ${speed}`;
     }
+
+    /* if (snake[0].getAttribute('posX') === bomb.getAttribute('posX') && snake[0].getAttribute('posY') === bomb.getAttribute('posY')) {
+         bomb.classList.remove('bomb');
+         let a = snake[snake.length - 1].getAttribute('posX');
+         let b = snake[snake.length - 1].getAttribute('posY');
+         snake.pop(document.querySelector('[posX = "' + a + '"][posY = "' + b + '"]'));
+         createBomb();
+         score--;
+         input.value = `Ваши очки: ${score}, spped: ${speed}`;
+     }почему не работает ? */
+
+    if (snake[0].classList.contains('bomb')) {
+        setTimeout(() => {
+            alert(`игра окончена. Ваши очки: ${score}`)
+        }, 200)
+
+        stopMove();
+        snake[0].style.background = 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVaZsvfBwoMklptsBSVKY4S8wCRCUY7alnGQ&usqp=CAU) center no-repeat';
+        snake[0].style.backgroundSize = "cover";
+    }
+
+    /*if (mouse[0].classList.contains('bomb')) {
+        createMouse()
+    }почему змея исчезает ?*/
 
     if (snake[0].classList.contains('snakeBody')) {
         setTimeout(() => {
@@ -96,28 +127,34 @@ function move() {
     addSnakeClasses();
 
     steps = true;
-    if(speed > 50 && score !== 0 && score % 5 === 0){
-        speed -=50;
+    if (speed > 50 && score !== 0 && score % 5 === 0 && !speed_changed) {
+        speed -= 50;
+        speed_changed = true
         updateMove(speed)
+    } else if(score % 5 !== 0){
+        speed_changed = false
     }
 }
 
 
 window.addEventListener('keydown', function (e) {
-    const keyKode = e.key;
+    const key = e.key;
+    console.log(key)
     if (steps === true) {
-        if (keyKode === 'ArrowLeft' && direction !== 'right') {
+        if (key === 'ArrowLeft' && direction !== 'right') {
             direction = 'left';
             steps = false;
-        } else if (keyKode === 'ArrowUp' && direction !== 'down') {
+        } else if (key === 'ArrowUp' && direction !== 'down') {
             direction = 'up';
             steps = false;
-        } else if (keyKode === 'ArrowRight' && direction !== 'left') {
+        } else if (key === 'ArrowRight' && direction !== 'left') {
             direction = 'right';
             steps = false;
-        } else if (keyKode === 'ArrowDown' && direction !== 'up') {
+        } else if (key === 'ArrowDown' && direction !== 'up') {
             direction = 'down';
             steps = false;
+        } else if (key === 'Escape') {
+            stopMove();
         }
     }
 });
@@ -152,9 +189,11 @@ function generateSnake() {
     let posX = random(3, field_width);
     let posY = random(1, field_width);
 
-    return [document.querySelector('[posX = "' + posX + '"][posY = "' + posY + '"]'),
-        document.querySelector('[posX = "' + (posX - 1) + '"][posY = "' + posY + '"]'),
-        document.querySelector('[posX = "' + (posX - 2) + '"][posY = "' + posY + '"]')]
+    return [
+        selectElemByCords(posX, posY),
+        selectElemByCords(posX - 1, posY),
+        selectElemByCords(posX - 2, posY)
+    ]
 }
 
 function random(min, max) {
@@ -166,17 +205,33 @@ function createMouse() {
         let posX = random(1, field_width);
         let posY = random(1, field_width);
         return [posX, posY];
-
     }
 
     let mouseCoordinates = generateMouse();
 
-    mouse = document.querySelector('[posX = "' + mouseCoordinates[0] + '"][posY = "' + mouseCoordinates[1] + '"]')
+    mouse = selectElemByCords(mouseCoordinates[0], mouseCoordinates[1])
     while (mouse.classList.contains('snakeBody')) {
         let mouseCoordinates = generateMouse();
-        mouse = document.querySelector('[posX = "' + mouseCoordinates[0] + '"][posY = "' + mouseCoordinates[1] + '"]');
+        mouse = selectElemByCords(mouseCoordinates[0], mouseCoordinates[1]);
     }
     mouse.classList.add('mouse');
+}
+
+function createBomb() {
+    function generateBomb() {
+        let posX = random(1, field_width);
+        let posY = random(1, field_width);
+        return [posX, posY];
+    }
+
+    let bombCoordinates = generateBomb();
+
+    bomb = selectElemByCords(bombCoordinates[0], bombCoordinates[1])
+    while (bomb.classList.contains('snakeBody')) {
+        let mouseCoordinates = generateBomb();
+        bomb = selectElemByCords(bombCoordinates[0], bombCoordinates[1]);
+    }
+    bomb.classList.add('bomb');
 }
 
 function addSnakeClasses() {
