@@ -106,8 +106,7 @@ function move() {
         }, 200)
 
         stopMove();
-        snake[0].style.background = 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVaZsvfBwoMklptsBSVKY4S8wCRCUY7alnGQ&usqp=CAU) center no-repeat';
-        snake[0].style.backgroundSize = "cover";
+        snake[0].classList.add('bum');
     }
 
     /*if (mouse[0].classList.contains('bomb')) {
@@ -139,7 +138,6 @@ function move() {
 
 window.addEventListener('keydown', function (e) {
     const key = e.key;
-    console.log(key)
     if (steps === true) {
         if (key === 'ArrowLeft' && direction !== 'right') {
             direction = 'left';
@@ -158,7 +156,31 @@ window.addEventListener('keydown', function (e) {
         }
     }
 });
-
+/*
+switch (key) {
+    case 'ArrowLeft':
+     if (&& direction !== 'right') {
+        direction = 'left';
+        steps = false;
+        break;
+        }
+    case 'ArrowUp' && direction !== 'down':
+        direction = 'up';
+        steps = false;
+        break;
+    case 'ArrowRight' && direction !== 'left':
+        direction = 'right';
+        steps = false;
+        break;
+    case 'ArrowDown' && direction !== 'up':
+        direction = 'down';
+        steps = false;
+        break;
+    case 'Escape':
+        stopMove()
+        break;
+}
+*/
 function generateGameField() {
     let field = document.createElement('div');
     document.body.appendChild(field);
@@ -228,7 +250,7 @@ function createBomb() {
 
     bomb = selectElemByCords(bombCoordinates[0], bombCoordinates[1])
     while (bomb.classList.contains('snakeBody')) {
-        let mouseCoordinates = generateBomb();
+        let bombCoordinates = generateBomb();
         bomb = selectElemByCords(bombCoordinates[0], bombCoordinates[1]);
     }
     bomb.classList.add('bomb');
