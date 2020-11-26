@@ -14,7 +14,7 @@ body {
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
-    background: url(https://img4.goodfon.ru/wallpaper/nbig/6/1a/green-grass-summer-gazon-fon-trava-zelenaia.jpg)
+    background: url(green-grass-summer-gazon-fon-trava-zelenaia.jpg)
 }
 
 .excel {
@@ -24,23 +24,23 @@ body {
 }
 
 .bomb {
-    background: url("https://pngimg.com/uploads/bomb/bomb_PNG41.png");
+    background: url(bomb_PNG41.png);
     background-size: cover;
 }
 
 .snakeBody {
-    background: url("https://mota.ru/upload/wallpapers/source/2013/07/30/17/01/36830/shMHJPZozm.jpg");
+    background: url(shMHJPZozm.jpg);
     background-size: cover;
     border-radius: 50%;
 }
 
 .head {
-    background: url("https://i.dlpng.com/static/png/6316931_preview.png");
+    background: url(6316931_preview.png);
     background-size: cover;
     border-radius: 10%;
 }
 
 .mouse {
-    background: url(https://www.pngpix.com/wp-content/uploads/2016/11/PNGPIX-COM-Dinosaur-PNG-Transparent-Image.png);
+    background: url(PNGPIX-COM-Dinosaur-PNG-Transparent-Image.png);
     background-size: cover;
 }

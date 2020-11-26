@@ -106,7 +106,9 @@ function move() {
         }, 200)
 
         stopMove();
-        snake[0].classList.add('bum');
+        snake[0].style.background = 'url("./eat_bomb.png") center no-repeat';
+        snake[0].style.borderRadius = '50%';
+        snake[0].style.backgroundSize = "cover";
     }
 
     /*if (mouse[0].classList.contains('bomb')) {
@@ -119,7 +121,7 @@ function move() {
         }, 200)
 
         stopMove();
-        snake[0].style.background = 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVaZsvfBwoMklptsBSVKY4S8wCRCUY7alnGQ&usqp=CAU) center no-repeat';
+        snake[0].style.background = 'url("./klipartz.com.png") center no-repeat';
         snake[0].style.backgroundSize = "cover";
     }
 
