@@ -139,50 +139,44 @@ function move() {
 
 
 window.addEventListener('keydown', function (e) {
-    const key = e.key;
+    const code = e.code;
     if (steps === true) {
-        if (key === 'ArrowLeft' && direction !== 'right') {
-            direction = 'left';
-            steps = false;
-        } else if (key === 'ArrowUp' && direction !== 'down') {
-            direction = 'up';
-            steps = false;
-        } else if (key === 'ArrowRight' && direction !== 'left') {
-            direction = 'right';
-            steps = false;
-        } else if (key === 'ArrowDown' && direction !== 'up') {
-            direction = 'down';
-            steps = false;
-        } else if (key === 'Escape') {
-            stopMove();
+        switch (code) {
+            case 'ArrowLeft':
+            case 'KeyA':
+                if (direction !== 'right') {
+                    direction = 'left';
+                    steps = false;
+                }
+                break;
+            case 'ArrowUp':
+            case 'KeyW':
+                if (direction !== 'down') {
+                    direction = 'up';
+                    steps = false;
+                }
+                break;
+            case 'ArrowRight':
+            case 'KeyD':
+                if (direction !== 'left') {
+                    direction = 'right';
+                    steps = false;
+                }
+                break;
+            case 'ArrowDown':
+            case 'KeyS':
+                if (direction !== 'up') {
+                    direction = 'down';
+                    steps = false;
+                }
+                break;
+            case 'Escape':
+                stopMove()
+                break;
         }
     }
 });
-/*
-switch (key) {
-    case 'ArrowLeft':
-     if (&& direction !== 'right') {
-        direction = 'left';
-        steps = false;
-        break;
-        }
-    case 'ArrowUp' && direction !== 'down':
-        direction = 'up';
-        steps = false;
-        break;
-    case 'ArrowRight' && direction !== 'left':
-        direction = 'right';
-        steps = false;
-        break;
-    case 'ArrowDown' && direction !== 'up':
-        direction = 'down';
-        steps = false;
-        break;
-    case 'Escape':
-        stopMove()
-        break;
-}
-*/
+
 function generateGameField() {
     let field = document.createElement('div');
     document.body.appendChild(field);
