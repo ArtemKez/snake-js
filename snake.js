@@ -1,10 +1,9 @@
 let direction = 'right';
-let steps = false;
 let score = 0;
 let mouse;
 let input;
 let field_width = 20;
-let speed = 300;
+let speed = 500;
 let bomb;
 let speed_changed = false;
 generateGameField();
@@ -15,24 +14,9 @@ let snake = generateSnake();
 addSnakeClasses();
 createMouse();
 createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
-createBomb();
 generateInput();
 
 let interval = setInterval(move, speed);
-
 
 function updateMove(duration) {
     stopMove()
@@ -43,12 +27,6 @@ function stopMove() {
     if (interval) {
         clearInterval(interval);
         interval = null;
-    }
-}
-
-function clear() {
-    if (score > 1) {
-        interval = setInterval(move, 100);
     }
 }
 
@@ -90,16 +68,6 @@ function move() {
         input.value = `Ваши очки: ${score}, speed: ${speed}`;
     }
 
-    /* if (snake[0].getAttribute('posX') === bomb.getAttribute('posX') && snake[0].getAttribute('posY') === bomb.getAttribute('posY')) {
-         bomb.classList.remove('bomb');
-         let a = snake[snake.length - 1].getAttribute('posX');
-         let b = snake[snake.length - 1].getAttribute('posY');
-         snake.pop(document.querySelector('[posX = "' + a + '"][posY = "' + b + '"]'));
-         createBomb();
-         score--;
-         input.value = `Ваши очки: ${score}, spped: ${speed}`;
-     }почему не работает ? */
-
     if (snake[0].classList.contains('bomb')) {
         setTimeout(() => {
             alert(`игра окончена. Ваши очки: ${score}`)
@@ -110,10 +78,6 @@ function move() {
         snake[0].style.borderRadius = '50%';
         snake[0].style.backgroundSize = "cover";
     }
-
-    /*if (mouse[0].classList.contains('bomb')) {
-        createMouse()
-    }почему змея исчезает ?*/
 
     if (snake[0].classList.contains('snakeBody')) {
         setTimeout(() => {
@@ -127,12 +91,11 @@ function move() {
 
     addSnakeClasses();
 
-    steps = true;
     if (speed > 50 && score !== 0 && score % 5 === 0 && !speed_changed) {
         speed -= 50;
         speed_changed = true
         updateMove(speed)
-    } else if(score % 5 !== 0){
+    } else if (score % 5 !== 0) {
         speed_changed = false
     }
 }
@@ -140,40 +103,34 @@ function move() {
 
 window.addEventListener('keydown', function (e) {
     const code = e.code;
-    if (steps === true) {
-        switch (code) {
-            case 'ArrowLeft':
-            case 'KeyA':
-                if (direction !== 'right') {
-                    direction = 'left';
-                    steps = false;
-                }
-                break;
-            case 'ArrowUp':
-            case 'KeyW':
-                if (direction !== 'down') {
-                    direction = 'up';
-                    steps = false;
-                }
-                break;
-            case 'ArrowRight':
-            case 'KeyD':
-                if (direction !== 'left') {
-                    direction = 'right';
-                    steps = false;
-                }
-                break;
-            case 'ArrowDown':
-            case 'KeyS':
-                if (direction !== 'up') {
-                    direction = 'down';
-                    steps = false;
-                }
-                break;
-            case 'Escape':
-                stopMove()
-                break;
-        }
+    switch (code) {
+        case 'ArrowLeft':
+        case 'KeyA':
+            if (direction !== 'right') {
+                direction = 'left';
+            }
+            break;
+        case 'ArrowUp':
+        case 'KeyW':
+            if (direction !== 'down') {
+                direction = 'up';
+            }
+            break;
+        case 'ArrowRight':
+        case 'KeyD':
+            if (direction !== 'left') {
+                direction = 'right';
+            }
+            break;
+        case 'ArrowDown':
+        case 'KeyS':
+            if (direction !== 'up') {
+                direction = 'down';
+            }
+            break;
+        case 'Escape':
+            stopMove()
+            break;
     }
 });
 
