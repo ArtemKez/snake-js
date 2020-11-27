@@ -6,17 +6,16 @@ let field_width = 20;
 let speed = 500;
 let bomb;
 let speed_changed = false;
+let interval;
 generateGameField();
 
 let snake = generateSnake();
-
 
 addSnakeClasses();
 createMouse();
 createBomb();
 generateInput();
-
-let interval = setInterval(move, speed);
+updateMove(speed);
 
 function updateMove(duration) {
     stopMove()
@@ -100,7 +99,6 @@ function move() {
     }
 }
 
-
 window.addEventListener('keydown', function (e) {
     const code = e.code;
     switch (code) {
@@ -129,7 +127,11 @@ window.addEventListener('keydown', function (e) {
             }
             break;
         case 'Escape':
-            stopMove()
+            if (!interval) {
+                updateMove(speed);
+            } else {
+                stopMove()
+            }
             break;
     }
 });
