@@ -73,7 +73,7 @@ function move() {
         }, 200)
 
         stopMove();
-        snake[0].style.background = 'url("./eat_bomb.png") center no-repeat';
+        snake[0].style.background = 'url("./snake-js/eat_bomb.png") center no-repeat';
         snake[0].style.borderRadius = '50%';
         snake[0].style.backgroundSize = "cover";
     }
@@ -84,7 +84,7 @@ function move() {
         }, 200)
 
         stopMove();
-        snake[0].style.background = 'url("./klipartz.com.png") center no-repeat';
+        snake[0].style.background = 'url("./snake-js/klipartz.com.png") center no-repeat';
         snake[0].style.backgroundSize = "cover";
     }
 
@@ -138,7 +138,7 @@ window.addEventListener('keydown', function (e) {
 
 function generateGameField() {
     let field = document.createElement('div');
-    document.body.appendChild(field);
+    document.getElementById('fieldSnake').appendChild(field);
     field.classList.add('field');
 
     for (let i = 1; i < 401; i++) {
@@ -219,9 +219,8 @@ function addSnakeClasses() {
 }
 
 function generateInput() {
-// ГАВНО!!!!
     input = document.createElement('input');
-    document.body.appendChild(input);
+    document.getElementById('fieldSnake').appendChild(input);
 
     input.style.cssText = `
 margin: auto;
