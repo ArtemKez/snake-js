@@ -7,6 +7,7 @@ let speed = 500;
 let bomb;
 let speed_changed = false;
 let interval;
+let game_end = true;
 generateGameField();
 
 let snake = generateSnake();
@@ -70,6 +71,7 @@ function move() {
     if (snake[0].classList.contains('bomb')) {
         setTimeout(() => {
             alert(`игра окончена. Ваши очки: ${score}`)
+            game_end = false;
         }, 200)
 
         stopMove();
@@ -81,6 +83,7 @@ function move() {
     if (snake[0].classList.contains('snakeBody')) {
         setTimeout(() => {
             alert(`игра окончена. Ваши очки: ${score}`)
+            game_end = false;
         }, 200)
 
         stopMove();
@@ -127,12 +130,16 @@ window.addEventListener('keydown', function (e) {
             }
             break;
         case 'Escape':
-            if (!interval) {
-                updateMove(speed);
-            } else {
+            if (game_end === false) {
                 stopMove()
+            } else {
+                if (!interval) {
+                    updateMove(speed);
+                } else {
+                    stopMove()
+                }
+                break;
             }
-            break;
     }
 });
 
